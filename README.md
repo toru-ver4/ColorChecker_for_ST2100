@@ -3,9 +3,9 @@
 ## 概要
 
 SDR の ColorChecker は RGB値が様々な場所で公開されているが、
-HDR の ColorChecker の RGB値は調べる限りではどこにも公開されていないので作る。
+HDR の ColorChecker は RGB値が調べる限りどこにも公開されていない。なので作る。
 
-余談だが、本ドキュメントでは*マクベスチャート*という呼び方はせず、*ColorChecker*に名称を統一する。理由は Wikipedia での本件の項目名が ColorChecker だったからである。
+余談だが、本ドキュメントでは*マクベスチャート*という呼び方はせず、*ColorChecker* と呼ぶ。理由は Wikipedia での本件の項目名が ColorChecker だったからである。
 
 ## ColorChekcr の色座標データ
 
@@ -18,16 +18,6 @@ BabelColor が公開している [ColorChecker RGB and spectra](http://www.babel
 * ColorChecker 1976
 
 今回は *ColorChecker 2005* を用いる。理由は何となくである。別のを使いたければ後述のソースコードを1行修正すれば良い。
-
-### 余談1：ColorChecker が複数ある件
-
-末尾の Appendix1 参照。
-
-なぜ ColorChecker が3種類も存在するかについては、BabelColor の [TechnicalPater](https://pdfs.semanticscholar.org/0e03/251ad1e6d3c3fb9cb0b1f9754351a959e065.pdf) が参考になる。</br>
-※実を言うと x-rite が 2014年に新しいデータ(？)を公開しているが無視する。</br>
-[カラーチェッカーSGおよびクラシックのチャートに適用される新しい仕様](http://xritephoto.com/ph_product_overview.aspx?ID=938&Action=Support&SupportID=5884)
-
-
 
 ## ColorChecker の色温度変換
 
@@ -78,13 +68,13 @@ OpenCV は Python のバージョンに依って手順が異なるためここ�
 
 ## Appendix
 
-### Appendix1. ColorChecker が複数ある件
+### A1. ColorChecker が複数ある件
 
 なぜ ColorChecker が3種類も存在するかについては、BabelColor の [TechnicalPater](https://pdfs.semanticscholar.org/0e03/251ad1e6d3c3fb9cb0b1f9754351a959e065.pdf) が参考になる。</br>
 ※実を言うと x-rite が 2014年に新しいデータ(？)を公開しているが無視する。</br>
 [カラーチェッカーSGおよびクラシックのチャートに適用される新しい仕様](http://xritephoto.com/ph_product_overview.aspx?ID=938&Action=Support&SupportID=5884)
 
-### Appendix2. ColorChecker 1976 と 2005 の違い
+### A2. ColorChecker 1976 と ColorChecker 2005 の違い
 
 #### ColorChecker 1976
 
