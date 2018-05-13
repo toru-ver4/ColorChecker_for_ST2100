@@ -27,8 +27,8 @@ CHROMATIC_ADAPTATION_TRANSFORM = 'CAT02'
 
 
 """ Color Space を選択(Gamut, WhitePoint, XYZ_to_RGB_mtx で使用) """
-COLOR_SPACE = colour.models.BT2020_COLOURSPACE
-# COLOR_SPACE = colour.models.BT709_COLOURSPACE
+# COLOR_SPACE = colour.models.BT2020_COLOURSPACE
+COLOR_SPACE = colour.models.BT709_COLOURSPACE
 # COLOR_SPACE = colour.models.ACES_PROXY_COLOURSPACE
 # COLOR_SPACE = colour.models.S_GAMUT3_COLOURSPACE
 # COLOR_SPACE = colour.models.S_GAMUT3_CINE_COLOURSPACE
@@ -64,8 +64,8 @@ OETF では OOTF の inverse も一緒に掛ける必要がある。
 """
 # OETF_TYPE = 'HLG'
 # OETF_TYPE = 'ST2084'
-# OETF_TYPE = "sRGB"
-OETF_TYPE = "BT1886_Reverse"  # gamma = 1/2.4
+OETF_TYPE = "sRGB"
+# OETF_TYPE = "BT1886_Reverse"  # gamma = 1/2.4
 
 
 """ Image Spec """
@@ -105,8 +105,8 @@ def get_colorchecker_large_xyz_and_whitepoint(cc_name=COLOR_CHECKER_NAME):
     """
     colour_checker_param = colour.COLOURCHECKERS.get(cc_name)
 
-    # 今回の処理では必要ないデータもあるので xyY だけ抽出
-    # ------------------------------------------------
+    # 今回の処理では必要ないデータもあるので xyY と whitepoint だけ抽出
+    # -------------------------------------------------------------
     _name, data, whitepoint = colour_checker_param
     temp_xyY = []
     for _index, label, xyY in data:
@@ -144,7 +144,29 @@ def get_linear_rgb_from_large_xyz(large_xyz, whitepoint,
                                    large_xyz_to_rgb_matrix,
                                    chromatic_adaptation_transform)
 
+    # overflow, underflow check
+    # -----------------------------
+    rgb[rgb < 0.0] = 0.0
+    rgb[rgb > 1.0] = 1.0
+
     return rgb
+
+
+def oetf_bt1886(x):
+    """
+    BT.1886 の EOTF の Reverse を行う
+
+    Parameters
+    ------------
+    x : array_like
+        [0:1] の Linear Data
+
+    Returns
+    ------------
+    array_like
+        [0:1] の Gammaが掛かったデータ
+    """
+    return x ** (1/2.4)
 
 
 def get_rgb_with_prime(rgb):
@@ -168,11 +190,14 @@ def get_rgb_with_prime(rgb):
         oetf_func = colour.models.oetf_ST2084
     elif OETF_TYPE == 'sRGB':
         oetf_func = colour.models.oetf_sRGB
+    elif OETF_TYPE == 'BT1886_Reverse':
+        oetf_func = oetf_bt1886
     else:
         oetf_func = None
 
     # [0:1] の RGB値を所望の輝度値[cd/m2] に変換。ただしHDRの場合のみ
-    # ----------------------------------------
+    # 変換する理由は、oetf の関数の引数の単位が [cd/m2] だから。
+    # ------------------------------------------------------------
     if OETF_TYPE == 'HLG' or OETF_TYPE == 'ST2084':
         rgb_bright = rgb * TARGET_BRIGHTNESS
     else:
@@ -180,10 +205,7 @@ def get_rgb_with_prime(rgb):
 
     # OETF 適用
     # -----------------------------------------
-    if OETF_TYPE == 'BT1886_Reverse':
-        rgb_prime = rgb_bright ** (1/2.4)
-    else:
-        rgb_prime = oetf_func(rgb_bright)
+    rgb_prime = oetf_func(rgb_bright)
 
     return rgb_prime
 
@@ -213,7 +235,7 @@ def save_color_checker_image(rgb):
     Parameters
     ------------
     rgb : array_like
-        [0:1] の Linear Data
+        [0:1] の ガンマカーブ適用済みデータ
 
     """
 
@@ -258,7 +280,7 @@ def save_color_checker_image(rgb):
                                           WHITE_POINT_STR, OETF_TYPE)
     cv2.imwrite(file_name, _get_16bit_img(img_all_patch[:, :, ::-1]))
 
-    # 測定用の画面中央パッチを24種類、個別に作成
+    # 測定用の画面中央パッチを24種類、個別に保存
     # --------------------------------------------------
     img_each_patch = np.zeros((img_height, img_width, 3))
     patch_width = int(img_width * 0.15)

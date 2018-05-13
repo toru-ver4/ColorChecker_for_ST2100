@@ -38,6 +38,13 @@ BabelColor が公開している [ColorChecker RGB and spectra](http://www.babel
 
 ```main.py``` 参照。
 
+### 注意事項
+
+設定する色域が狭い場合、ColorChecker の値を RGB値で正しく表現出来ない場合がある。</br>
+例：BT.709色域の Cyan は Red の値が **0** に張り付き正しく表現できない
+
+測定値が理論値と一致しない場合は ```ColorChecker_Value_GAMUT_WHITE-POINT_OETF.csv``` を開き、RGB値が **0** または **1023** に張り付いていないか確認すること。
+
 ### カスタマイズ
 
 以下の変数を変更することにより、カスタマイズが可能である。なお、これらの変数はソースコード冒頭にまとまっている。
