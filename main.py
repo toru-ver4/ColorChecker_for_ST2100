@@ -8,7 +8,6 @@ ITU-R. BT.2100 用の ColorChecker を作る。
 import os
 import colour
 import numpy as np
-from colour.colorimetry import ILLUMINANTS
 import cv2
 
 
@@ -43,7 +42,7 @@ COLOR_SPACE = colour.models.BT2020_COLOURSPACE
 # WHITE_POINT_STR = 'DCI-P3'
 WHITE_POINT_STR = 'D65'
 
-WHITE_POINT = ILLUMINANTS['cie_2_1931'][WHITE_POINT_STR]
+WHITE_POINT = colour.colorimetry.ILLUMINANTS['cie_2_1931'][WHITE_POINT_STR]
 
 """
 OETF を選択
@@ -64,8 +63,8 @@ OETF では OOTF の inverse も一緒に掛ける必要がある。
 * OETF = colour.models.oetf_BT2100_PQ
 """
 # OETF_TYPE = 'HLG'
-OETF_TYPE = 'ST2084'
-OETF_TYPE = "sRGB"
+# OETF_TYPE = 'ST2084'
+# OETF_TYPE = "sRGB"
 OETF_TYPE = "BT1886_Reverse"  # gamma = 1/2.4
 
 
@@ -167,16 +166,24 @@ def get_rgb_with_prime(rgb):
         oetf_func = colour.models.eotf_reverse_BT2100_HLG
     elif OETF_TYPE == 'ST2084':
         oetf_func = colour.models.oetf_ST2084
+    elif OETF_TYPE == 'sRGB':
+        oetf_func = colour.models.oetf_sRGB
     else:
         oetf_func = None
 
-    # [0:1] の RGB値を所望の輝度値[cd/m2] に変換
+    # [0:1] の RGB値を所望の輝度値[cd/m2] に変換。ただしHDRの場合のみ
     # ----------------------------------------
-    rgb_bright = rgb * TARGET_BRIGHTNESS
+    if OETF_TYPE == 'HLG' or OETF_TYPE == 'ST2084':
+        rgb_bright = rgb * TARGET_BRIGHTNESS
+    else:
+        rgb_bright = rgb
 
     # OETF 適用
     # -----------------------------------------
-    rgb_prime = oetf_func(rgb_bright)
+    if OETF_TYPE == 'BT1886_Reverse':
+        rgb_prime = rgb_bright ** (1/2.4)
+    else:
+        rgb_prime = oetf_func(rgb_bright)
 
     return rgb_prime
 
@@ -246,7 +253,7 @@ def save_color_checker_image(rgb):
 
     # パッチのプレビューと保存
     # --------------------------------------------------
-    # preview_image(img_all_patch)
+    preview_image(img_all_patch)
     file_name = all_patch_file_str.format(COLOR_SPACE._name,
                                           WHITE_POINT_STR, OETF_TYPE)
     cv2.imwrite(file_name, _get_16bit_img(img_all_patch[:, :, ::-1]))

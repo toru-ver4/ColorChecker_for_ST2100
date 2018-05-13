@@ -20,3 +20,4 @@ GRTAGS
 **/db.sqlite3
 **/*.py[co]
 output/*.tiff
+output/*.csv
