@@ -32,9 +32,99 @@ BabelColor が公開している [ColorChecker RGB and spectra](http://www.babel
 
 もちろん、Bradford変換をしたい場合は、後述のソースコードを1行修正すれば実現できる。
 
-## 実装
+## 実装とカスタマイズ
+
+### ソースコード
 
 ```main.py``` 参照。
+
+### カスタマイズ
+
+以下の変数を変更することにより、カスタマイズが可能である。なお、これらの変数はソースコード冒頭にまとまっている。
+
+#### COLOR_CHECKER_NAME
+
+3種類ある ColorChecker の中から好みのものを選べる。
+
+```python
+
+""" ColorChecker を選択 """
+# COLOR_CHECKER_NAME = 'ColorChecker 1976'
+COLOR_CHECKER_NAME = 'ColorChecker 2005'
+# COLOR_CHECKER_NAME = 'BabelColor Average'
+
+```
+
+#### CHROMATIC_ADAPTATION_TRANSFORM
+
+2種類ある chromatic adaptation の方式から好みのものを選べる。
+
+```python
+
+""" Chromatic Adaptation を選択 """
+# CHROMATIC_ADAPTATION_TRANSFORM = 'Bradford'
+CHROMATIC_ADAPTATION_TRANSFORM = 'CAT02'
+
+```
+
+#### White Point
+
+ColorChecker の xyY値は D50光源での値である。xyY値を RGB値に変換すさ際、任意の白色点へマッピングすることができる。
+
+```python
+
+""" WhitePoint を選択 """
+# WHITE_POINT_STR = 'D50'
+# WHITE_POINT_STR = 'D55'
+# WHITE_POINT_STR = 'D60'
+# WHITE_POINT_STR = 'DCI-P3'
+WHITE_POINT_STR = 'D65'
+
+```
+
+#### OETF
+
+xyY値から変換したRGB値に対してかける OETF を選択する。
+
+```python
+
+"""
+OETF を選択
+
+HDR の OETF は一番ミスりやすい箇所。
+測定目的の場合は OOTF を考慮する必要がある。
+
+HLG の場合、モニター側で EOTF と一緒に OOTF が掛かるため
+OETF では OOTF の inverse も一緒に掛ける必要がある。
+
+一方で ST2084 の場合はモニター側で OOTF は掛からないので
+素直に OETF だけ適用すれば良い。
+
+補足だが、以下の2つの関数は内部動作が異なる(OOTFの有無)。
+
+* OETF = colour.models.oetf_ST2084
+* OETF = colour.models.oetf_BT2100_PQ
+
+"""
+# OETF_TYPE = 'HLG'
+OETF_TYPE = 'ST2084'
+# OETF_TYPE = "sRGB"
+# OETF_TYPE = "BT1886_Reverse"  # gamma = 1/2.4
+
+```
+
+#### Image Spec
+
+画像サイズや ColorChecker のサイズなどを指定できる。
+
+```python
+
+IMG_WIDTH = 1920
+IMG_HEIGHT = 1080
+COLOR_CHECKER_SIZE = 1 / 4.5  # [0:1] で記述
+COLOR_CHECKER_PADDING = 0.01
+
+```
 
 ## 動作環境構築
 
@@ -60,9 +150,14 @@ OpenCV は Python のバージョンに依って手順が異なるためここ�
 
 ## 生成物
 
-```text
+./output フォルダ以下に生成される。
 
-./output/rgb_value
+```python
+
+./output
+    ColorChecker_All_GAMUT_WHITE-POINT_OETF.tiff : 24種類のColorCheckerを1枚の画像に収めたもの
+    ColorChecker_Measure_Patch_GAMUT_WHITE-POINT_OETF_xx_NAME.tiff : 測定用パッチ
+    ColorChecker_Value_GAMUT_WHITE-POINT_OETF.csv : xyY値およびRGB値を収めたCSVファイル
 
 ```
 
@@ -83,10 +178,3 @@ C光源での xyY が記載。D光源の値は無い
 #### ColorChecker 2005
 
 D光源での xyY値および L\*a\*b\*値が記載。GretagMacbeth が ColorChecker の値を D光源で測定し直したもの（らしい）。
-
-
-## 実装前のメモ
-
-### CSV仕様
-
-idx, name, x, y, Y, R, G, B

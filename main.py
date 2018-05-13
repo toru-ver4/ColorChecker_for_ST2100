@@ -237,7 +237,7 @@ def save_color_checker_image(rgb):
     patch_height = patch_width
     patch_space = int(img_height * COLOR_CHECKER_PADDING)
     measure_file_str = "./output/ColorChecker_Measure_Patch_{:s}_{:s}_{:s}_{:02d}_{:s}.tiff"
-    all_patch_file_str = "./output/ColorChecker_All_{:s}_{:s}_{:s}_.tiff"
+    all_patch_file_str = "./output/ColorChecker_All_{:s}_{:s}_{:s}.tiff"
 
     # 24ループで1枚の画像に24パッチを描画
     # -------------------------------------------------
