@@ -5,9 +5,13 @@
 SDR の ColorChecker は RGB値が様々な場所で公開されているが、
 HDR の ColorChecker は RGB値が調べる限りどこにも公開されていない。なので作る。
 
-余談だが、本ドキュメントでは*マクベスチャート*という呼び方はせず、*ColorChecker* と呼ぶ。理由は Wikipedia での本件の項目名が ColorChecker だったからである。
+余談だが、本ドキュメントでは*マクベスチャート*という呼び方はせず、*ColorChecker* と呼ぶ。理由は [Wikipedia](https://en.wikipedia.org/wiki/ColorChecker) での本件の項目名が ColorChecker だったからである。
 
-## ColorChekcr の色座標データ
+| BT.709 | ST.2084 | HLG(system_gamma=1.2) |
+|:--------:|:--------:|:-------------------:|
+|![BT.709](https://user-images.githubusercontent.com/3609012/39997650-9c66a278-57be-11e8-9d3f-669018437be0.png)|![ST.2084](https://user-images.githubusercontent.com/3609012/39997404-d20b3606-57bd-11e8-8ec4-2ea4bf5ebb0c.png) | ![HLG](https://user-images.githubusercontent.com/3609012/39997441-f01cbda4-57bd-11e8-8f65-c640976d6693.png)|
+
+## ColorChecker の色座標データ
 
 BabelColor が公開している [ColorChecker RGB and spectra](http://www.babelcolor.com/download/ColorChecker_RGB_and_spectra.xls) を使用する。
 
