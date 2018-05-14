@@ -76,7 +76,7 @@ CHROMATIC_ADAPTATION_TRANSFORM = 'CAT02'
 
 #### White Point
 
-ColorChecker の xyY値は D50光源での値である。xyY値を RGB値に変換すさ際、任意の白色点へマッピングすることができる。
+ColorChecker の xyY値は D50光源での値である。xyY値を RGB値に変換する際、任意の白色点へマッピングすることができる。
 
 ```python
 
