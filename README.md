@@ -9,7 +9,7 @@ HDR の ColorChecker は RGB値が調べる限りどこにも公開されてい�
 
 | ST.2084 | HLG(system_gamma=1.2) |
 |:--------:|:-------------------:|
-|![ST.2084](https://1drv.ms/u/s!Aoyl6po8qsyGt22R91aMQTwZHK-Q) | ![HLG](https://1drv.ms/u/s!Aoyl6po8qsyGt25F9KwirJOuvLk_)|
+|![ST.2084](https://user-images.githubusercontent.com/3609012/39997404-d20b3606-57bd-11e8-8ec4-2ea4bf5ebb0c.png) | ![HLG](https://user-images.githubusercontent.com/3609012/39997441-f01cbda4-57bd-11e8-8f65-c640976d6693.png)|
 
 ## ColorChecker の色座標データ
 
