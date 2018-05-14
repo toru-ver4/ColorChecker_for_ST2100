@@ -9,7 +9,7 @@ HDR の ColorChecker は RGB値が調べる限りどこにも公開されてい�
 
 | ST.2084 | HLG(system_gamma=1.2) |
 |:--------:|:-------------------:|
-|![ST.2084](./sample/ColorChecker_All_ITU-R BT.2020_D65_ST2084.tiff) | ![HLG](ColorChecker_All_ITU-R BT.2020_D65_HLG.tiff)|
+|![ST.2084](https://1drv.ms/u/s!Aoyl6po8qsyGt22R91aMQTwZHK-Q) | ![HLG](https://1drv.ms/u/s!Aoyl6po8qsyGt25F9KwirJOuvLk_)|
 
 ## ColorChecker の色座標データ
 
