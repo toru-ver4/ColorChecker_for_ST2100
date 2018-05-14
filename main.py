@@ -27,8 +27,8 @@ CHROMATIC_ADAPTATION_TRANSFORM = 'CAT02'
 
 
 """ Color Space を選択(Gamut, WhitePoint, XYZ_to_RGB_mtx で使用) """
-# COLOR_SPACE = colour.models.BT2020_COLOURSPACE
-COLOR_SPACE = colour.models.BT709_COLOURSPACE
+COLOR_SPACE = colour.models.BT2020_COLOURSPACE
+# COLOR_SPACE = colour.models.BT709_COLOURSPACE
 # COLOR_SPACE = colour.models.ACES_PROXY_COLOURSPACE
 # COLOR_SPACE = colour.models.S_GAMUT3_COLOURSPACE
 # COLOR_SPACE = colour.models.S_GAMUT3_CINE_COLOURSPACE
@@ -62,9 +62,9 @@ OETF では OOTF の inverse も一緒に掛ける必要がある。
 * OETF = colour.models.oetf_ST2084
 * OETF = colour.models.oetf_BT2100_PQ
 """
-# OETF_TYPE = 'HLG'
+OETF_TYPE = 'HLG'
 # OETF_TYPE = 'ST2084'
-OETF_TYPE = "sRGB"
+# OETF_TYPE = "sRGB"
 # OETF_TYPE = "BT1886_Reverse"  # gamma = 1/2.4
 
 
