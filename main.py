@@ -27,8 +27,8 @@ CHROMATIC_ADAPTATION_TRANSFORM = 'CAT02'
 
 
 """ Color Space を選択(Gamut, WhitePoint, XYZ_to_RGB_mtx で使用) """
-COLOR_SPACE = colour.models.BT2020_COLOURSPACE
-# COLOR_SPACE = colour.models.BT709_COLOURSPACE
+# COLOR_SPACE = colour.models.BT2020_COLOURSPACE
+COLOR_SPACE = colour.models.BT709_COLOURSPACE
 # COLOR_SPACE = colour.models.ACES_PROXY_COLOURSPACE
 # COLOR_SPACE = colour.models.S_GAMUT3_COLOURSPACE
 # COLOR_SPACE = colour.models.S_GAMUT3_CINE_COLOURSPACE
@@ -62,10 +62,10 @@ OETF では OOTF の inverse も一緒に掛ける必要がある。
 * OETF = colour.models.oetf_ST2084
 * OETF = colour.models.oetf_BT2100_PQ
 """
-OETF_TYPE = 'HLG'
+# OETF_TYPE = 'HLG'
 # OETF_TYPE = 'ST2084'
 # OETF_TYPE = "sRGB"
-# OETF_TYPE = "BT1886_Reverse"  # gamma = 1/2.4
+OETF_TYPE = "BT1886_Reverse"  # gamma = 1/2.4
 
 
 """ Image Spec """
@@ -150,6 +150,38 @@ def get_linear_rgb_from_large_xyz(large_xyz, whitepoint,
     rgb[rgb > 1.0] = 1.0
 
     return rgb
+
+
+def rgb2xyz(rgb_linear, whitepoint, color_space=COLOR_SPACE):
+    """
+    Parameters
+    ------------
+    rgb_linear : array_like
+        [0:1] の linear rgb値
+    whitepoint : array_like
+        rgb_linear の whitepoint
+    color_space : RGB_Colourspace
+        XYZ to RGB 変換の対象となる color space
+
+    Note
+    ----
+    white point は src, dst で共通でなければならない。
+
+    Returns
+    ------------
+    array_like
+        XYZ値
+    """
+    illuminant_RGB = whitepoint
+    illuminant_XYZ = whitepoint
+    chromatic_adaptation_transform = CHROMATIC_ADAPTATION_TRANSFORM
+    rgb_to_large_xyz_matrix = color_space.RGB_to_XYZ_matrix
+    large_xyz = colour.models.RGB_to_XYZ(rgb_linear,
+                                         illuminant_RGB, illuminant_XYZ,
+                                         rgb_to_large_xyz_matrix,
+                                         chromatic_adaptation_transform)
+
+    return large_xyz
 
 
 def oetf_bt1886(x):
@@ -378,9 +410,13 @@ def main_func():
     # ---------------------------------
     save_color_checker_image(rgb_prime)
 
+    # 出力用のWhite Point の Large XYZ値算出
+    # -------------------------------------
+    large_xyz_output = rgb2xyz(rgb, WHITE_POINT, COLOR_SPACE)
+
     # xyY値、RGB値をまとめた CSVファイルを吐き出し
     # -----------------------------------------
-    save_color_checker_value(large_xyz, rgb_prime)
+    save_color_checker_value(large_xyz_output, rgb_prime)
 
 
 if __name__ == '__main__':
