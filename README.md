@@ -13,7 +13,7 @@ HDR の ColorChecker は RGB値が調べる限りどこにも公開されてい�
 
 ## ColorChecker の色座標データ
 
-BabelColor が公開している [ColorChecker RGB and spectra](http://www.babelcolor.com/download/ColorChecker_RGB_and_spectra.xls) を使用する。
+BabelColor が公開している [ColorChecker RGB and spectra](http://www.babelcolor.com/index_htm_files/ColorChecker_RGB_and_spectra-Avg20_2006.zip) を使用する。
 
 このファイルでは以下の3種類の ColorChecker のデータが公開されている。
 
